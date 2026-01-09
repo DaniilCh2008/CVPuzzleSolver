@@ -1,4 +1,5 @@
 add_library(libimages STATIC
+        libimages/algorithms/grayscale.cpp
         libimages/algorithms/morphology.cpp
         libimages/debug_io.cpp
         libimages/image.cpp
@@ -10,6 +11,7 @@ target_link_libraries(libimages PUBLIC libbase PRIVATE third_party_stb)
 
 if (BUILD_TESTING)
     add_executable(libimages_tests
+            libimages/algorithms/grayscale_tests.cpp
             libimages/algorithms/morphology_tests.cpp
             libimages/debug_io_tests.cpp
             libimages/tests_utils.cpp
