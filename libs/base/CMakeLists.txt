@@ -1,4 +1,5 @@
 add_library(libbase STATIC
+        libbase/bbox2.cpp
         libbase/configure_working_directory.cpp
         libbase/disjoint_set.cpp
         libbase/fast_random.cpp
@@ -11,6 +12,7 @@ target_include_directories(libbase PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 if (BUILD_TESTING)
     add_executable(libbase_tests
+            libbase/bbox2_tests.cpp
             libbase/configure_working_directory_tests.cpp
             libbase/disjoint_set_tests.cpp
             libbase/fast_random_tests.cpp
