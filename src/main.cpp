@@ -38,29 +38,29 @@ int main() {
         std::vector<float> intensities_on_border;
         for (int j = 0; j < h; ++j) {
             for (int i = 0; i < w; ++i) {
-                // skip everything except borders
+                // пропускаем все пиксели кроме границы изображения
                 if (i != 0 && i != w - 1 && j != 0 && j != h - 1)
                     continue;
                 intensities_on_border.push_back(grayscale(j, i));
             }
         }
-        // DONE: what invariant we can check with rassert about intensities_on_border.size()?
+        // DONE: какой инвариант мы можем проверить про размер intensities_on_border.size()? чем он должен быть равен?
         rassert(intensities_on_border.size() == 2 * w + 2 * h - 4, 7283197129381312);
         std::cout << "intensities on border: " << stats::summaryStats(intensities_on_border) << std::endl;
 
-        // DONE: find background_threshold
+        // DONE: найдем порог разделяющий яркость на фон и объект - background_threshold
         double background_threshold = 1.5 * stats::percentile(intensities_on_border, 90);
         std::cout << "background threshold=" << background_threshold << std::endl;
 
-        // DONE: build is_foreground_mask + save its visualization on disk + print into log percent of background
+        // DONE: построим маску объект-фон + сохраним визуализацию на диск + выведем в лог процент пикселей на фоне
         image8u is_foreground_mask = threshold_masking(grayscale, background_threshold);
         double is_foreground_sum = stats::sum(is_foreground_mask.toVector());
         std::cout << "thresholded background: " << stats::toPercent(w * h - is_foreground_sum / 255.0, 1.0 * w * h) << std::endl;
         debug_io::dump_image("debug/02_is_foreground_mask.png", is_foreground_mask);
 
         t.restart();
-        // DONE: make mask more smooth thanks to morphology
-        // DONE: firstly try dilation + erosion, is the mask robust? no outliers?
+        // DONE: сделаем маску более гладкой и точной через Морфологию
+        // DONE: сначала попробуем dilation + erosion, все ли хорошо поулчилось? нет ли выбросов?
         int strength = 3;
 
         const bool with_openmp = true;
@@ -110,7 +110,7 @@ int main() {
             debug_io::dump_image(obj_debug_dir + "01_image.jpg", objImages[obj]);
             debug_io::dump_image(obj_debug_dir + "02_mask.jpg", objMasks[obj]);
 
-            // TODO реализуйте построение маски контура-периметра, нажмите Ctrl+Click на buildContourMask:
+            // TODO 1 реализуйте построение маски контура-периметра, нажмите Ctrl+Click на buildContourMask:
             image8u objContourMask = buildContourMask(objMasks[obj]);
 
             debug_io::dump_image(obj_debug_dir + "03_mask_contour.jpg", objContourMask);
@@ -130,7 +130,7 @@ int main() {
             debug_io::dump_image(obj_debug_dir + "04_mask_contour_clockwise.jpg", contour_visualization);
 
             // у нас теперь есть перечень пикселей на контуре объекта
-            // TODO реализуйте определение в этом контуре 4 вершин-углов и нарисуйте их на картинке, нажмите Ctrl+Click на simplifyContour:
+            // TODO 2 реализуйте определение в этом контуре 4 вершин-углов и нарисуйте их на картинке, нажмите Ctrl+Click на simplifyContour:
             std::vector<point2i> corners = simplifyContour(contour, 4);
             rassert(corners.size() == 4, 32174819274812);
 

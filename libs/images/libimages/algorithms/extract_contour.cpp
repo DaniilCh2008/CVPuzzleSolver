@@ -70,22 +70,20 @@ image8u buildContourMask(const image8u &objectMask) {
     const int w = objectMask.width();
     const int h = objectMask.height();
 
+    // это новая маска которую мы хотим построить, изначально она заполнена нулями (черная)
     image8u contour(w, h, 1);
 
-    for (int y = 0; y < h; ++y) {
-        for (int x = 0; x < w; ++x) {
-            if (objectMask(y, x) != kFg) continue;
+    for (int j = 0; j < h; ++j) {
+        for (int i = 0; i < w; ++i) {
+            // TODO 1 для каждого пикселя вам надо сделать следующее
+            // посмотреть на 8 соседей - по стороне и диагонали (будьте аккуратны - не выйдите за пределы картинки)
+            // если среди них только 255 - то наш пиксель внутри объекта, то есть наш пиксель - не граница
+            // если среди них только 0 - то наш пиксель снаружи объекта (фон), то есть наш пиксель - не граница
+            // а вот если среди соседей есть и те и те - то мы на границе!
+            // и в таком случае надо сохранить в нашем пикселе в contour(j, i) число 255
 
-            bool isBoundary = false;
-            for (int k = 0; k < 8; ++k) {
-                const int nx = x + dx8[k];
-                const int ny = y + dy8[k];
-                if (!inBounds(nx, ny, w, h) || objectMask(ny, nx) != kFg) {
-                    isBoundary = true;
-                    break;
-                }
-            }
-            if (isBoundary) contour(y, x) = kFg;
+            // и удалите эту ошибку:
+            throw std::runtime_error("Function buildContourMask() is not implemented!");
         }
     }
 
